@@ -11,6 +11,37 @@ jobs:
     name: Build and Test Application
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: ecommerce_db
+          MYSQL_USER: ecommerce_user
+          MYSQL_PASSWORD: userpassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      activemq:
+        image: apache/activemq-classic:5.18.3
+        env:
+          ACTIVEMQ_ADMIN_LOGIN: admin
+          ACTIVEMQ_ADMIN_PASSWORD: admin
+        ports:
+          - 61616:61616
+          - 8161:8161
+        options: >-
+          --health-cmd="curl -f http://localhost:8161 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

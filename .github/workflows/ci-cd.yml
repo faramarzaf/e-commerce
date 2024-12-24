@@ -75,6 +75,13 @@ jobs:
          restore-keys: |
           ${{ runner.os }}-maven-
 
+      - name: Pull the latest ActiveMQ Docker image
+        run: docker pull apache/activemq-classic:5.18.3
+
+      - name: Run ActiveMQ container
+        run: |
+          docker run -d --name activemq -p 61616:61616 -p 8161:8161 apache/activemq-classic:5.18.3
+
       - name: Build and Test with Maven
         run: mvn clean install -X
 

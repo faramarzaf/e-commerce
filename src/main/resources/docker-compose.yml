@@ -16,6 +16,12 @@ services:
       - mysql_data:/var/lib/mysql
 
   activemq:
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+
     image: apache/activemq-classic:5.18.3
     container_name: activemq_container
     restart: always

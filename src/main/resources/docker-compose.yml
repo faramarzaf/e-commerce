@@ -1,6 +1,16 @@
-version: '3.8'
-
 services:
+
+  e-commerce-app:
+    image: e-commerce-app  # Replace this with your image name, or use 'build' for local build
+    build: .
+    ports:
+      - "8080:8080"  # Expose the Spring Boot application on port 8080
+    networks:
+      - monitoring
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod  # Optionally, set active profiles for your app
+
+
   mysql:
     image: mysql:8.0
     container_name: mysql_container
@@ -34,6 +44,39 @@ services:
     volumes:
       - activemq_data:/opt/activemq/data
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  # Mount prometheus.yml
+      - prometheus_data:/prometheus  # Persistent data storage for Prometheus
+    ports:
+      - "9090:9090"  # Expose Prometheus UI
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Grafana web UI
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Set admin password for Grafana
+    volumes:
+      - grafana_data:/var/lib/grafana  # Persistent data storage for Grafana
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+
+
+
+networks:
+  monitoring:
+    driver: bridge
+
 volumes:
   mysql_data:
   activemq_data:
+  prometheus_data:
+  grafana_data:

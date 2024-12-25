@@ -36,7 +36,7 @@ public class OrderService {
     private final OrderProductRepository orderProductRepository;
     private final OrderEventHandler orderEventHandler;
 
-
+    @Transactional
     public OrderResponseDto getOrderById(Long orderId) {
         return orderMapper.toOrderResponseDto(orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found")));
     }

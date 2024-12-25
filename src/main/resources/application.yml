@@ -26,3 +26,9 @@ jwt:
     key: abcdefghijklmnopqrstuvwxyz123456
   expiration:
     time: 43200000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus

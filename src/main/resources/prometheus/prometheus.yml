@@ -1,8 +1,12 @@
 global:
-  scrape_interval: 15s  # Scrape every 15 seconds
+  scrape_interval: 5s  # Scrape every 5 seconds
 
 scrape_configs:
   - job_name: 'spring-boot'
-    metrics_path: '/actuator/prometheus'  # Spring Boot metrics endpoint
+    metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['e-commerce-app:8080']  # Replace with the service name and port
+      - targets: ['e-commerce-app:8080']
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

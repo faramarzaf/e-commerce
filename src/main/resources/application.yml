@@ -1,5 +1,12 @@
 spring:
   datasource:
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
     username: ecommerce_user
     url: jdbc:mysql://localhost:3306/ecommerce_db
     password: userpassword
@@ -31,4 +38,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
